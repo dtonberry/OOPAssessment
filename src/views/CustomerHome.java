@@ -6,6 +6,7 @@
 package views;
 
 import models.Customer;
+import models.Order;
 
 /**
  *
@@ -108,7 +109,10 @@ public class CustomerHome extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBrowseProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseProductsActionPerformed
-        BrowseProducts browseProducts = new BrowseProducts(loggedInCustomer);
+
+        Order currentOrder = new Order();
+
+        BrowseProducts browseProducts = new BrowseProducts(loggedInCustomer, currentOrder);
         this.dispose();
         browseProducts.setVisible(true);
     }//GEN-LAST:event_btnBrowseProductsActionPerformed

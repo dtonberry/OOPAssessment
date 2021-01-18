@@ -27,7 +27,7 @@ public class DBManager {
     // this is loading the driver needed to use the UCanAccess DB Connection
     private final String driver = "net.ucanaccess.jdbc.UcanaccessDriver";
     // This is the connection string needed to access the database
-    private final String connectionString = "jdbc:ucanaccess://C:\\Users\\marki\\Documents\\NetBeansProjects\\OOPAssignment1\\Data\\ShopDB.accdb";
+    private final String connectionString = "jdbc:ucanaccess://Data\\ShopDB.accdb";
 
     //this hashmap returns products
     public HashMap<Integer, Product> loadProducts()

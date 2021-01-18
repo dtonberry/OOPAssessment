@@ -6,5 +6,11 @@
         "Library/UCanAccess-2.0.9.3-bin/UCanAccess-2.0.9.3-bin/lib/commons-logging-1.1.1.jar",
         "Library/UCanAccess-2.0.9.3-bin/UCanAccess-2.0.9.3-bin/lib/hsqldb.jar",
         "Library/UCanAccess-2.0.9.3-bin/UCanAccess-2.0.9.3-bin/lib/jackcess-2.0.8.jar"
-    ]
+    ],
+    "files.exclude": {
+        "**/.classpath": true,
+        "**/.project": true,
+        "**/.settings": true,
+        "**/.factorypath": true
+    }
 }

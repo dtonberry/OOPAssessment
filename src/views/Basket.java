@@ -5,6 +5,13 @@
  */
 package views;
 
+import java.util.Map;
+
+import javax.swing.table.DefaultTableModel;
+
+import models.Customer;
+import models.Order;
+import models.OrderLine;
 import models.Staff;
 
 /**
@@ -13,11 +20,33 @@ import models.Staff;
  */
 public class Basket extends javax.swing.JFrame {
 
+    private Customer loggedInCustomer;
+    private Order currentOrder;
+
     /**
      * Creates new form Basket
      */
-    public Basket() {
+    public Basket(Customer customer, Order order) {
+        loggedInCustomer = customer; //taking the currently logged in customer as an arguement
+        currentOrder = order; //taking the current order as an arguement
         initComponents();
+
+        DefaultTableModel basketModel = (DefaultTableModel)tblBasket.getModel();
+
+        for(Map.Entry<Integer, OrderLine> olEntry : currentOrder.getOrderLines().entrySet())
+        {
+            OrderLine ol = olEntry.getValue();
+            basketModel.addRow( new Object[] {
+                ol.getProduct().getProductId(),
+                ol.getProduct().getProductName(),
+                ol.getProduct().getPrice(),
+                ol.getQuantity()
+            }
+
+            );
+
+
+        }
     }
 
     /**
@@ -31,27 +60,37 @@ public class Basket extends javax.swing.JFrame {
 
         jMenu1 = new javax.swing.JMenu();
         jScrollPane1 = new javax.swing.JScrollPane();
-        productBasket = new javax.swing.JTable();
+        tblBasket = new javax.swing.JTable();
         btnAddMoreProducts = new javax.swing.JButton();
+        btnBack = new javax.swing.JButton();
 
         jMenu1.setText("jMenu1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        productBasket.setModel(new javax.swing.table.DefaultTableModel(
+        tblBasket.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "Product ID", "Product", "Price", "Quantity"
             }
         ));
-        jScrollPane1.setViewportView(productBasket);
+        jScrollPane1.setViewportView(tblBasket);
 
         btnAddMoreProducts.setText("ADD MORE PRODUCTS");
+        btnAddMoreProducts.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddMoreProductsActionPerformed(evt);
+            }
+        });
+
+        btnBack.setText("Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -64,7 +103,10 @@ public class Basket extends javax.swing.JFrame {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(126, 126, 126)
-                        .addComponent(btnAddMoreProducts)))
+                        .addComponent(btnAddMoreProducts))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnBack)))
                 .addContainerGap(13, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -74,11 +116,25 @@ public class Basket extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(36, 36, 36)
                 .addComponent(btnAddMoreProducts)
-                .addGap(99, 99, 99))
+                .addGap(65, 65, 65)
+                .addComponent(btnBack)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        BrowseProducts bmenu = new BrowseProducts(loggedInCustomer, currentOrder);
+        this.dispose();
+        bmenu.setVisible(true);
+    }//GEN-LAST:event_btnBackActionPerformed
+
+    private void btnAddMoreProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddMoreProductsActionPerformed
+        BrowseProducts bmenu = new BrowseProducts(loggedInCustomer, currentOrder);
+        this.dispose();
+        bmenu.setVisible(true);
+    }//GEN-LAST:event_btnAddMoreProductsActionPerformed
 
     /**
      * @param args the command line arguments
@@ -110,15 +166,16 @@ public class Basket extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Basket().setVisible(true);
+                //new Basket().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddMoreProducts;
+    private javax.swing.JButton btnBack;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable productBasket;
+    private javax.swing.JTable tblBasket;
     // End of variables declaration//GEN-END:variables
 }

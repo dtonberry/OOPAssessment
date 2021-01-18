@@ -20,6 +20,8 @@ import models.Clothing;
 import models.Customer;
 import models.DBManager;
 import models.Footwear;
+import models.Order;
+import models.OrderLine;
 import models.Product;
 
 /**
@@ -31,6 +33,7 @@ public class BrowseProducts extends javax.swing.JFrame {
     private Customer loggedInCustomer;
     private HashMap<Integer, Product> products;
     ArrayList<Product> productList = new ArrayList<Product>();
+    private Order currentOrder;
     
     public ArrayList<Product> productList()
     {
@@ -60,6 +63,20 @@ public class BrowseProducts extends javax.swing.JFrame {
         //sets the products HashMap to populate with the 
         //contents from "loadProducts"
         products = db.loadProducts(); 
+
+        initComponents();
+    }
+
+    //this constructor will handle when an order needs to be passed back to the "BrowseProducts" view
+    public BrowseProducts(Customer customer, Order order) {
+
+        loggedInCustomer = customer; //sets the Customer object "loggedInCustomer" to customer
+        currentOrder = order;
+        DBManager db  = new DBManager(); //loads a new instance of Database Manager
+        //sets the products HashMap to populate with the 
+        //contents from "loadProducts"
+        products = db.loadProducts(); 
+
         initComponents();
     }
 
@@ -208,9 +225,7 @@ public class BrowseProducts extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnViewBasketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewBasketActionPerformed
-        DefaultTableModel basketList = new DefaultTableModel();
-        basketList.addRow(productList.toArray());
-        Basket basket  = new Basket();
+        Basket basket  = new Basket(loggedInCustomer, currentOrder);
         this.dispose();
         basket.setVisible(true);
     }//GEN-LAST:event_btnViewBasketActionPerformed
@@ -245,11 +260,11 @@ public class BrowseProducts extends javax.swing.JFrame {
                 }
                 else
                 {
-                    if (selectedProduct.getStockLevel() > productQuantity)
-                    {
-                        lblErrorBasket.setText("This Product has been added to your basket");
-                        productList.add(selectedProduct);
-                    }
+                    OrderLine orderLine = new OrderLine(0, selectedProduct, productQuantity); //OrderLine(int orderLineIdIn, Product productIn, int quantityIn)
+
+                    currentOrder.addOrderLine(orderLine);
+
+                    lblErrorBasket.setText("Product Successfully Added To Basket");
                 }
             }
             

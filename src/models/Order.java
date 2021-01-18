@@ -20,6 +20,23 @@ public class Order {
     private String status;
     private HashMap<Integer, OrderLine> orderLines;
     
+    public void addOrderLine(OrderLine ol)
+    {
+        int orderLineId = 0;
+
+        //while loop that creates a unique OrderLineId by increasing from 0 until one doesn't match
+        while (orderLines.containsKey(orderLineId))
+        {
+            orderLineId++;
+        }
+
+        //set the orderline to the 'orderLineId' number
+        ol.setOrderLineId(orderLineId);
+
+        //add that number to the orderLines hashmap (Key, Value) => (orderLineId, ol)
+        orderLines.put(orderLineId, ol);
+    }
+    
     //getters and setters
     /**
      * @return the orderId

@@ -16,8 +16,7 @@ public class OrderLine
     private Product product;
     private int quantity;
     private double lineTotal;
-    
-    private HashMap<Integer, OrderLine> orderLines;
+
     
     //getters and setters
     /**
