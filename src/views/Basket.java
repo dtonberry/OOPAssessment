@@ -160,6 +160,7 @@ public class Basket extends javax.swing.JFrame {
 
                 basketModel.removeRow(tblBasket.getSelectedRow());
                 JOptionPane.showMessageDialog(null, message[1]);
+                
             }
         }
     }//GEN-LAST:event_btnRemoveProductsActionPerformed
