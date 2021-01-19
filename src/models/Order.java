@@ -7,37 +7,90 @@ package models;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  *
  * @author mark
  */
 public class Order {
-    //private variables
+    // private variables
     private int orderId;
     private Date orderDate;
     private double orderTotal;
     private String status;
     private HashMap<Integer, OrderLine> orderLines;
-    
-    public void addOrderLine(OrderLine ol)
-    {
-        int orderLineId = 0;
 
-        //while loop that creates a unique OrderLineId by increasing from 0 until one doesn't match
-        while (orderLines.containsKey(orderLineId))
-        {
-            orderLineId++;
+    /*********************************************************************
+     * this will add an orderline to the orderline hashmap based on the orderline id
+     * and the OrderLine "ol"
+     **********************************************************************/
+    public boolean addOrderLine(OrderLine ol) {
+        boolean canBeAdded = true; // boolean to show if a product can be added or not
+        for (Map.Entry<Integer, OrderLine> olEntry : orderLines.entrySet()) {
+            OrderLine actuaOrderLine = olEntry.getValue();
+
+            // basically if the product id already exists in the orderline, you can't add
+            // another
+            // of the same product id
+            if (ol.getProduct().getProductId() == actuaOrderLine.getProduct().getProductId()) {
+                canBeAdded = false;
+            }
         }
 
-        //set the orderline to the 'orderLineId' number
-        ol.setOrderLineId(orderLineId);
+        if (canBeAdded == false) {
+            return false; // return false meaning the orderline can not be added
+        }
 
-        //add that number to the orderLines hashmap (Key, Value) => (orderLineId, ol)
-        orderLines.put(orderLineId, ol);
+        else {
+            int orderLineId = 0;
+            // while loop that creates a unique OrderLineId by increasing from 0 until one
+            // doesn't match
+            while (orderLines.containsKey(orderLineId)) {
+                orderLineId++;
+            }
+
+            // set the orderline to the 'orderLineId' number
+            ol.setOrderLineId(orderLineId);
+
+            // add that number to the orderLines hashmap (Key, Value) => (orderLineId, ol)
+            orderLines.put(orderLineId, ol);
+
+            return true;
+        }
     }
-    
-    //getters and setters
+
+    /*********************************************************************
+     * this will remove an orderline to the orderline hashmap based on the product id
+     * and the OrderLineId
+     **********************************************************************/
+    public void removeOrderLine(int productId) {
+        int orderLineId = -1; // default orderlineid to search for in the hashmap
+
+        for (Map.Entry<Integer, OrderLine> olEntry : orderLines.entrySet()) {
+            OrderLine removalOrderLine = olEntry.getValue();
+
+            if(removalOrderLine.getProduct().getProductId() == productId)
+            {
+                orderLineId = removalOrderLine.getOrderLineId();
+            }
+        }
+
+        //remove the orderline using the orderlineid key when it does not return -1 (which it never will)
+        if (orderLineId != -1)
+        {
+            orderLines.remove(orderLineId);
+        }
+
+    }
+
+    public void removeAllOrderLine()
+    {
+        orderLines.clear(); //remove all entries from the hashmap
+    }
+
+    // getters and setters
     /**
      * @return the orderId
      */
@@ -93,7 +146,7 @@ public class Order {
     public void setStatus(String status) {
         this.status = status;
     }
-    
+
     public HashMap<Integer, OrderLine> getOrderLines() {
         return orderLines;
     }
@@ -104,22 +157,18 @@ public class Order {
     public void setOrderLines(HashMap<Integer, OrderLine> orderLines) {
         this.orderLines = orderLines;
     }
-    
-    
-    //constructors
-    public Order()
-    {
+
+    // constructors
+    public Order() {
         orderId = 0;
         orderDate = new Date();
         orderTotal = 0;
         status = "IN PROGRESS";
         orderLines = new HashMap<Integer, OrderLine>();
     }
-    
-    //constructor with *EVERYTHING EXCEPT orderLines*
-    public Order(int orderIdIn, Date orderDateIn, double orderTotalIn,
-            String statusIn)
-    {
+
+    // constructor with *EVERYTHING EXCEPT orderLines*
+    public Order(int orderIdIn, Date orderDateIn, double orderTotalIn, String statusIn) {
         orderId = orderIdIn;
         orderDate = orderDateIn;
         orderTotal = orderTotalIn;

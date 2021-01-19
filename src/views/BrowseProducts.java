@@ -262,9 +262,14 @@ public class BrowseProducts extends javax.swing.JFrame {
                 {
                     OrderLine orderLine = new OrderLine(0, selectedProduct, productQuantity); //OrderLine(int orderLineIdIn, Product productIn, int quantityIn)
 
-                    currentOrder.addOrderLine(orderLine);
-
-                    lblErrorBasket.setText("Product Successfully Added To Basket");
+                    if(currentOrder.addOrderLine(orderLine))
+                    {
+                        lblErrorBasket.setText("Product Successfully Added To Basket");
+                    }
+                    else 
+                    {
+                        lblErrorBasket.setText("Error: Product Already In Basket");
+                    }
                 }
             }
             

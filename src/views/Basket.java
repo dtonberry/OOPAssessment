@@ -7,12 +7,12 @@ package views;
 
 import java.util.Map;
 
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 import models.Customer;
 import models.Order;
 import models.OrderLine;
-import models.Staff;
 
 /**
  *
@@ -22,6 +22,10 @@ public class Basket extends javax.swing.JFrame {
 
     private Customer loggedInCustomer;
     private Order currentOrder;
+    private Object[] message = {
+        "No Product Selected",
+        "Product Successfully Removed"
+    };
 
     /**
      * Creates new form Basket
@@ -62,7 +66,7 @@ public class Basket extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblBasket = new javax.swing.JTable();
         btnAddMoreProducts = new javax.swing.JButton();
-        btnBack = new javax.swing.JButton();
+        btnRemoveProducts = new javax.swing.JButton();
 
         jMenu1.setText("jMenu1");
 
@@ -85,10 +89,10 @@ public class Basket extends javax.swing.JFrame {
             }
         });
 
-        btnBack.setText("Back");
-        btnBack.addActionListener(new java.awt.event.ActionListener() {
+        btnRemoveProducts.setText("Remove Selected Products");
+        btnRemoveProducts.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBackActionPerformed(evt);
+                btnRemoveProductsActionPerformed(evt);
             }
         });
 
@@ -102,11 +106,10 @@ public class Basket extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(126, 126, 126)
-                        .addComponent(btnAddMoreProducts))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnBack)))
+                        .addGap(111, 111, 111)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnRemoveProducts)
+                            .addComponent(btnAddMoreProducts))))
                 .addContainerGap(13, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -114,27 +117,52 @@ public class Basket extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(13, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
+                .addGap(26, 26, 26)
                 .addComponent(btnAddMoreProducts)
-                .addGap(65, 65, 65)
-                .addComponent(btnBack)
-                .addContainerGap())
+                .addGap(27, 27, 27)
+                .addComponent(btnRemoveProducts)
+                .addGap(54, 54, 54))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        BrowseProducts bmenu = new BrowseProducts(loggedInCustomer, currentOrder);
-        this.dispose();
-        bmenu.setVisible(true);
-    }//GEN-LAST:event_btnBackActionPerformed
-
     private void btnAddMoreProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddMoreProductsActionPerformed
-        BrowseProducts bmenu = new BrowseProducts(loggedInCustomer, currentOrder);
-        this.dispose();
-        bmenu.setVisible(true);
+        int result = JOptionPane.showConfirmDialog(null, "This will remove all items from your basket", "Are you sure?", JOptionPane.YES_NO_OPTION);
+
+        
+
+        if (result == JOptionPane.YES_OPTION)
+        {
+            currentOrder.removeAllOrderLine();
+            BrowseProducts bmenu = new BrowseProducts(loggedInCustomer, currentOrder);
+            this.dispose();
+            bmenu.setVisible(true);
+        }
     }//GEN-LAST:event_btnAddMoreProductsActionPerformed
+
+    private void btnRemoveProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveProductsActionPerformed
+        DefaultTableModel basketModel = (DefaultTableModel)tblBasket.getModel(); // new table model to handle removal
+
+        int result  = JOptionPane.showConfirmDialog(null, "This will remove the selected item from your basket", "Are you sure?", JOptionPane.YES_NO_CANCEL_OPTION);
+
+        if (result == JOptionPane.YES_OPTION)
+        {
+            if (tblBasket.getSelectedRow() == -1)
+            {
+                JOptionPane.showMessageDialog(null, message[0]);
+            }
+            else
+            {
+                int productId = Integer.parseInt(String.valueOf(tblBasket.getValueAt(tblBasket.getSelectedRow(), 0)));
+
+                currentOrder.removeOrderLine(productId); //remove the orderline using the "productId"
+
+                basketModel.removeRow(tblBasket.getSelectedRow());
+                JOptionPane.showMessageDialog(null, message[1]);
+            }
+        }
+    }//GEN-LAST:event_btnRemoveProductsActionPerformed
 
     /**
      * @param args the command line arguments
@@ -173,7 +201,7 @@ public class Basket extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddMoreProducts;
-    private javax.swing.JButton btnBack;
+    private javax.swing.JButton btnRemoveProducts;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblBasket;
