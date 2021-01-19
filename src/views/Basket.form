@@ -40,6 +40,8 @@
                   <Component id="btnBuyNow" min="-2" max="-2" attributes="0"/>
                   <Component id="btnRemoveProducts" min="-2" max="-2" attributes="0"/>
                   <Group type="102" attributes="0">
+                      <Component id="jLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="lblTotalPrice" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                       <Component id="btnAddMoreProducts" min="-2" max="-2" attributes="0"/>
@@ -58,6 +60,7 @@
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btnAddMoreProducts" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="lblTotalPrice" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -142,10 +145,12 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBuyNowActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JLabel" name="lblTotalPrice">
+    <Component class="javax.swing.JLabel" name="jLabel">
       <Properties>
         <Property name="text" type="java.lang.String" value="Total: "/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblTotalPrice">
     </Component>
   </SubComponents>
 </Form>

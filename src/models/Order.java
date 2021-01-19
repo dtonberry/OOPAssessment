@@ -7,7 +7,6 @@ package models;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -21,6 +20,22 @@ public class Order {
     private double orderTotal;
     private String status;
     private HashMap<Integer, OrderLine> orderLines;
+
+
+     /*********************************************************************
+     * this will calculate the total price of the orderlines by adding up
+     * all of the lineTotals
+     **********************************************************************/
+    public void calculateOrderTotal()
+    {
+        orderTotal = 0; //set the initial order total to 0, as to initialize it
+        for (Map.Entry<Integer, OrderLine> olEntry : orderLines.entrySet())
+        {
+            OrderLine actualOrderLine = olEntry.getValue();
+
+            orderTotal += actualOrderLine.getLineTotal();
+        }
+    }
 
     /*********************************************************************
      * this will add an orderline to the orderline hashmap based on the orderline id
@@ -174,5 +189,13 @@ public class Order {
         orderTotal = orderTotalIn;
         status = statusIn;
         orderLines = new HashMap<Integer, OrderLine>();
+    }
+    
+    public String DisplayConfirmation()
+    {
+        String confirmation = "<html>Thank you for your order \nYour Order ID is: " + getOrderId() + "<br>"
+        + "Please shop with us again! </html>";
+        
+        return confirmation;   
     }
 }

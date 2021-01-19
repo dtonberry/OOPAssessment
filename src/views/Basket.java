@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 import models.Customer;
+import models.DBManager;
 import models.Order;
 import models.OrderLine;
 
@@ -24,8 +25,11 @@ public class Basket extends javax.swing.JFrame {
     private Order currentOrder;
     private Object[] message = {
         "No Product Selected",
-        "Product Successfully Removed"
+        "Product Successfully Removed",
+        "ERROR: Basket is currently empty",
+        "SUCCESS: Order Successful"
     };
+    
 
     /**
      * Creates new form Basket
@@ -48,9 +52,10 @@ public class Basket extends javax.swing.JFrame {
             }
 
             );
-
-
         }
+
+
+        lblTotalPrice.setText("\u00a3" + String.valueOf(currentOrder.getOrderTotal()));
     }
 
     /**
@@ -67,6 +72,9 @@ public class Basket extends javax.swing.JFrame {
         tblBasket = new javax.swing.JTable();
         btnAddMoreProducts = new javax.swing.JButton();
         btnRemoveProducts = new javax.swing.JButton();
+        btnBuyNow = new javax.swing.JButton();
+        jLabel = new javax.swing.JLabel();
+        lblTotalPrice = new javax.swing.JLabel();
 
         jMenu1.setText("jMenu1");
 
@@ -96,20 +104,31 @@ public class Basket extends javax.swing.JFrame {
             }
         });
 
+        btnBuyNow.setText("BUY NOW");
+        btnBuyNow.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuyNowActionPerformed(evt);
+            }
+        });
+
+        jLabel.setText("Total: ");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(btnBuyNow)
+                    .addComponent(btnRemoveProducts)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(111, 111, 111)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnRemoveProducts)
-                            .addComponent(btnAddMoreProducts))))
+                        .addComponent(jLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblTotalPrice)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnAddMoreProducts))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(13, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -117,11 +136,16 @@ public class Basket extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(13, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
-                .addComponent(btnAddMoreProducts)
-                .addGap(27, 27, 27)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAddMoreProducts)
+                    .addComponent(jLabel)
+                    .addComponent(lblTotalPrice))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnRemoveProducts)
-                .addGap(54, 54, 54))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnBuyNow)
+                .addGap(49, 49, 49))
         );
 
         pack();
@@ -160,10 +184,42 @@ public class Basket extends javax.swing.JFrame {
 
                 basketModel.removeRow(tblBasket.getSelectedRow());
                 JOptionPane.showMessageDialog(null, message[1]);
+
+                currentOrder.calculateOrderTotal();
+                jLabel.setText("\u00a3" + String.valueOf(currentOrder.getOrderTotal()));
                 
             }
         }
     }//GEN-LAST:event_btnRemoveProductsActionPerformed
+
+    private void btnBuyNowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuyNowActionPerformed
+        int numberOfOrderLines = 0;
+
+        for (Map.Entry<Integer, OrderLine> olEntry : currentOrder.getOrderLines().entrySet())
+        {
+            numberOfOrderLines++;
+        }
+
+        if (numberOfOrderLines == 0)
+        {
+            JOptionPane.showMessageDialog(null, message[2]);
+        }
+        else
+        {
+            DBManager db = new DBManager();
+            
+            int result = JOptionPane.showConfirmDialog(null, "Is your order correct? \nPlease double check", "Confirmation", JOptionPane.YES_NO_OPTION);
+
+            if (result == JOptionPane.YES_OPTION)
+            {
+                db.writeOrder(currentOrder, loggedInCustomer.getUsername());
+                // JOptionPane.showMessageDialog(null, message[3]);
+            }
+            OrderConfirmation confirmMenu = new OrderConfirmation(loggedInCustomer, currentOrder);
+            this.dispose();
+            confirmMenu.setVisible(true);
+        }
+    }//GEN-LAST:event_btnBuyNowActionPerformed
 
     /**
      * @param args the command line arguments
@@ -202,9 +258,12 @@ public class Basket extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddMoreProducts;
+    private javax.swing.JButton btnBuyNow;
     private javax.swing.JButton btnRemoveProducts;
+    private javax.swing.JLabel jLabel;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblTotalPrice;
     private javax.swing.JTable tblBasket;
     // End of variables declaration//GEN-END:variables
 }

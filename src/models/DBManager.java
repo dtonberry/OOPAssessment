@@ -1,16 +1,13 @@
 package models;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.HashMap;
-import java.util.Map;
 
-import javax.naming.spi.DirStateFactory.Result;
 
 
 /*
@@ -193,6 +190,31 @@ public class DBManager {
             }
         } else {
             return null;
+        }
+    }
+    /*********************************************************************
+     * This will add the current orderline to the orders table in the database
+     * Using the Order class as that holds all of the information we need
+     **********************************************************************/
+    public void writeOrder(Order order, String customer)
+    {
+        try(Connection conn = DriverManager.getConnection(connectionString);){
+            //this loads the ucanaccess drivers
+            Class.forName(driver);
+            //insert into the database using a placeholder statement to improve readability
+            String query = "INSERT INTO Orders (OrderId, OrderDate, Username, OrderTotal, Status) VALUES(?, ?, ?, ?, ?)";
+            PreparedStatement ps = conn.prepareStatement(query);
+
+            ps.setInt(1, order.getOrderId());
+            ps.setObject(2, order.getOrderDate());
+            ps.setString(3, customer);
+            ps.setDouble(4, order.getOrderTotal());
+            ps.setString(5, order.getStatus());
+
+            ps.executeUpdate();
+        }
+        catch(Exception ex){
+            System.out.println("Error Writing Orders: " + ex.getMessage());
         }
     }
 

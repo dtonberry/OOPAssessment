@@ -5,21 +5,14 @@
  */
 package views;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.DefaultListModel;
-import javax.swing.JFormattedTextField;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.text.MaskFormatter;
-
-import models.Clothing;
 import models.Customer;
 import models.DBManager;
-import models.Footwear;
 import models.Order;
 import models.OrderLine;
 import models.Product;
@@ -265,6 +258,8 @@ public class BrowseProducts extends javax.swing.JFrame {
                     if(currentOrder.addOrderLine(orderLine))
                     {
                         lblErrorBasket.setText("Product Successfully Added To Basket");
+
+                        currentOrder.calculateOrderTotal();
                     }
                     else 
                     {
