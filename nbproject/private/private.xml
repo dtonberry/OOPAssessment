@@ -3,8 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/D:/Downloads/OOPAssignment1_Stage10/OOPAssignment1/src/views/OrderConfirmation.java</file>
+            <file>file:/D:/Downloads/OOPAssignment1_Stage10/OOPAssignment1/src/views/EditProducts.java</file>
+            <file>file:/D:/Downloads/OOPAssignment1_Stage10/OOPAssignment1/src/views/CustomerHome.java</file>
+            <file>file:/D:/Downloads/OOPAssignment1_Stage10/OOPAssignment1/src/models/Customer.java</file>
+            <file>file:/D:/Downloads/OOPAssignment1_Stage10/OOPAssignment1/src/models/Order.java</file>
             <file>file:/D:/Downloads/OOPAssignment1_Stage10/OOPAssignment1/src/views/Basket.java</file>
-            <file>file:/D:/Downloads/OOPAssignment1_Stage10/OOPAssignment1/src/views/BrowseProducts.java</file>
+            <file>file:/D:/Downloads/OOPAssignment1_Stage10/OOPAssignment1/src/views/MainMenu.java</file>
         </group>
     </open-files>
 </project-private>

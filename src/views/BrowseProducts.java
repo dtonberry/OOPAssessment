@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
+
 import models.Customer;
 import models.DBManager;
 import models.Order;
@@ -212,9 +214,16 @@ public class BrowseProducts extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        CustomerHome cmenu = new CustomerHome(loggedInCustomer);
-        this.dispose();
-        cmenu.setVisible(true);
+        int result = JOptionPane.showConfirmDialog(null, "This will remove all items from your basket", "Are you sure?", JOptionPane.YES_NO_OPTION);
+
+        
+
+        if (result == JOptionPane.YES_OPTION) {
+            currentOrder.removeAllOrderLine();
+            CustomerHome cmenu = new CustomerHome(loggedInCustomer);
+            this.dispose();
+            cmenu.setVisible(true);
+        }
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnViewBasketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewBasketActionPerformed

@@ -152,17 +152,10 @@ public class Basket extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddMoreProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddMoreProductsActionPerformed
-        int result = JOptionPane.showConfirmDialog(null, "This will remove all items from your basket", "Are you sure?", JOptionPane.YES_NO_OPTION);
 
-        
-
-        if (result == JOptionPane.YES_OPTION)
-        {
-            currentOrder.removeAllOrderLine();
-            BrowseProducts bmenu = new BrowseProducts(loggedInCustomer, currentOrder);
-            this.dispose();
-            bmenu.setVisible(true);
-        }
+        BrowseProducts bmenu = new BrowseProducts(loggedInCustomer, currentOrder);
+        this.dispose();
+        bmenu.setVisible(true);
     }//GEN-LAST:event_btnAddMoreProductsActionPerformed
 
     private void btnRemoveProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveProductsActionPerformed
@@ -186,7 +179,7 @@ public class Basket extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, message[1]);
 
                 currentOrder.calculateOrderTotal();
-                jLabel.setText("\u00a3" + String.valueOf(currentOrder.getOrderTotal()));
+                lblTotalPrice.setText("\u00a3" + String.valueOf(currentOrder.getOrderTotal()));
                 
             }
         }
