@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.HashMap;
 
+import javax.naming.spi.DirStateFactory.Result;
+
 
 
 /*
@@ -192,12 +194,55 @@ public class DBManager {
             return null;
         }
     }
+
+    /*********************************************************************
+     * This will add the current stock level to the products table in the database
+     * Using the Products class as that holds all of the information we need
+     **********************************************************************/ 
+    public void writeStockLevel(int productId, int quantity)
+    {
+        
+    }
+
+
+    /*********************************************************************
+     * This will add the current orderline to the orderline table in the database
+     * Using the OrderLine class as that holds all of the information we need
+     **********************************************************************/  
+    public void writeOrderLine(OrderLine ol, Product product)
+    {
+        try(Connection conn = DriverManager.getConnection(connectionString);){
+            //this loads the ucanaccess drivers
+            Class.forName(driver);
+            //insert into the database using a placeholder statement to improve readability
+            String query = "INSERT INTO Orders (OrderId, OrderDate, Username, OrderTotal, Status) VALUES(?, ?, ?, ?, ?)";
+            PreparedStatement ps = conn.prepareStatement(query);
+
+            ps.setInt(1, ol.getOrderLineId());
+            ps.setInt(2, product.getProductId());
+            ps.setInt(3, ol.getQuantity());
+            ps.setDouble(4, ol.getLineTotal());
+            ps.setInt(5, last) ;
+
+            ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            rs.next();
+            int lastInsertedOrderID = rs.getInt(1);
+        }
+        catch(Exception ex){
+            System.out.println("Error Writing Orders: " + ex.getMessage());
+        }
+    }
+
     /*********************************************************************
      * This will add the current orderline to the orders table in the database
      * Using the Order class as that holds all of the information we need
      **********************************************************************/
-    public void writeOrder(Order order, String customer)
+    public int writeOrder(Order order, String customer)
     {
+        var lastInsertedOrderID = 0;
+
         try(Connection conn = DriverManager.getConnection(connectionString);){
             //this loads the ucanaccess drivers
             Class.forName(driver);
@@ -212,10 +257,15 @@ public class DBManager {
             ps.setString(5, order.getStatus());
 
             ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            rs.next();
+            lastInsertedOrderID = rs.getInt(1);
         }
         catch(Exception ex){
             System.out.println("Error Writing Orders: " + ex.getMessage());
         }
+        return lastInsertedOrderID;
     }
 
     public Customer customerRegister(String addressLine1, String addressLine2,

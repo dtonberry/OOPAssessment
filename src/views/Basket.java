@@ -185,15 +185,25 @@ public class Basket extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnRemoveProductsActionPerformed
 
+    /********************************************************************
+     *  This will write the current OrderLine to the database
+     *  Using the DBManager writeOrder method.
+     ********************************************************************/ 
+     
     private void btnBuyNowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuyNowActionPerformed
-        int numberOfOrderLines = 0;
+        int numberOfOrderLines = 0; //number of orderlines by default which is 0
 
         for (Map.Entry<Integer, OrderLine> olEntry : currentOrder.getOrderLines().entrySet())
         {
-            numberOfOrderLines++;
+            numberOfOrderLines++; //for every orderline in the order, increment the total
         }
 
-        if (numberOfOrderLines == 0)
+        /******************************************************************
+         * if the number of orderlines is 0 at this point
+         * then no products are currently in the customers basket
+         * display error message to inform the customer
+         ******************************************************************/
+        if (numberOfOrderLines == 0) 
         {
             JOptionPane.showMessageDialog(null, message[2]);
         }
@@ -201,13 +211,17 @@ public class Basket extends javax.swing.JFrame {
         {
             DBManager db = new DBManager();
             
+            //JOptionPane to ask the customer if the order they are happy with their current order, that nothing is incorrect
             int result = JOptionPane.showConfirmDialog(null, "Is your order correct? \nPlease double check", "Confirmation", JOptionPane.YES_NO_OPTION);
 
+            //if the user clicks YES, the proceed to write the order to the database
             if (result == JOptionPane.YES_OPTION)
             {
                 db.writeOrder(currentOrder, loggedInCustomer.getUsername());
                 // JOptionPane.showMessageDialog(null, message[3]);
             }
+
+            //once the order is written to the database, display the order confirmation form
             OrderConfirmation confirmMenu = new OrderConfirmation(loggedInCustomer, currentOrder);
             this.dispose();
             confirmMenu.setVisible(true);

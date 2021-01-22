@@ -16,8 +16,8 @@ import models.Order;
  */
 public class OrderConfirmation extends javax.swing.JFrame {
 
-    private Customer loggedInCustomer;
-    private Order currentOrder;
+    private Customer loggedInCustomer; //currenly logged in customer
+    private Order currentOrder; //current order that has recently been written to the DB
 
     /**
      * Creates new form OrderConfirmation
@@ -27,11 +27,11 @@ public class OrderConfirmation extends javax.swing.JFrame {
         currentOrder = order;
         initComponents();
 
-        lblConfirmation.setText(currentOrder.DisplayConfirmation());
+        lblConfirmation.setText(currentOrder.DisplayConfirmation()); //gets the order confirmation message from the Order class
         
-        lblOrderStatus.setText(String.valueOf(currentOrder.getStatus()));
-        lblCustomerName.setText(String.valueOf(customer.getUsername()));
-        lblPrice.setText(String.valueOf(currentOrder.getOrderTotal()));        
+        lblOrderStatus.setText(String.valueOf(currentOrder.getStatus())); //gets the orders current status from the Order Class
+        lblCustomerName.setText(String.valueOf(customer.getUsername())); //gets the loggedInCustomer's username from the Customer class
+        lblPrice.setText(String.valueOf(currentOrder.getOrderTotal())); //gets the Total Order Price from the Order class       
     }
 
     /**
@@ -124,6 +124,10 @@ public class OrderConfirmation extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**********************************************************************
+     * returns the user back to the Customer Home menu 
+     * when the back button is clicked 
+     * ********************************************************************/
     private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
         CustomerHome cmenu = new CustomerHome(loggedInCustomer);
         this.dispose();
