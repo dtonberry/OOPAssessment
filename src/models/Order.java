@@ -193,6 +193,7 @@ public class Order {
     
     public String DisplayConfirmation()
     {
+        //int orderId = db.writeOrderLine(ol, orderId);
         String confirmation = "<html>Thank you for your order \nYour Order ID is: " + getOrderId() + "<br>"
         + "Please shop with us again! </html>";
         

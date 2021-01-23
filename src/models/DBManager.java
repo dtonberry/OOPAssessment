@@ -8,8 +8,6 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.HashMap;
 
-import javax.naming.spi.DirStateFactory.Result;
-
 
 
 /*
@@ -163,6 +161,34 @@ public class DBManager {
         return staffMap;
     }
 
+    //UNIMPLEMENTED
+    public int readOrderId(int productId, Order order)
+    {
+        int orderId = 0; //set default value for orderId to call later
+        try(Connection conn = DriverManager.getConnection(connectionString);){
+            //this loads the ucanaccess drivers
+            Class.forName(driver);
+            //insert into the database using a placeholder statement to improve readability
+            String query = "SELECT * FROM Orders WHERE ProductId = ";
+            PreparedStatement ps = conn.prepareStatement(query);
+
+            ResultSet rs = ps.executeQuery(query);
+
+            while(rs.next())
+            {
+                orderId = rs.getInt("OrderId");
+            }
+
+
+            ps.executeUpdate();
+        }
+        catch(Exception ex){
+            System.out.println("Error Writing OrderLines: " + ex.getMessage());
+        }
+
+        return orderId; //return the orderId from the given productId and Order
+    }
+
     // checking if the customer has the correct username and password
     public Customer customerLogin(String username, String password) {
         HashMap<String, Customer> customers = loadCustomers();
@@ -196,12 +222,30 @@ public class DBManager {
     }
 
     /*********************************************************************
-     * This will add the current stock level to the products table in the database
-     * Using the Products class as that holds all of the information we need
+     * This will alter the current stock level of the products table in the database
+     * Using the productId and quantity as our arguments
+     * as that holds all of the information we need
      **********************************************************************/ 
     public void writeStockLevel(int productId, int quantity)
     {
-        
+        try(Connection conn = DriverManager.getConnection(connectionString);){
+            //this loads the ucanaccess drivers
+            Class.forName(driver);
+            //insert into the database using a placeholder statement to improve readability
+            String query = "UPDATE Products SET StockLevel=(StockLevel - ?) WHERE ProductId=?";
+            PreparedStatement ps = conn.prepareStatement(query);
+
+            ps.setInt(1, quantity);
+
+            //ensuring that the productId does not change by passing the current productId
+            //and setting the update to basically change nothing
+            ps.setInt(2, productId);           
+
+            ps.executeUpdate();
+        }
+        catch(Exception ex){
+            System.out.println("Error Updating Stock Level: " + ex.getMessage());
+        }
     }
 
 
@@ -209,29 +253,25 @@ public class DBManager {
      * This will add the current orderline to the orderline table in the database
      * Using the OrderLine class as that holds all of the information we need
      **********************************************************************/  
-    public void writeOrderLine(OrderLine ol, Product product)
+    public void writeOrderLine(OrderLine ol, int orderId)
     {
         try(Connection conn = DriverManager.getConnection(connectionString);){
             //this loads the ucanaccess drivers
             Class.forName(driver);
             //insert into the database using a placeholder statement to improve readability
-            String query = "INSERT INTO Orders (OrderId, OrderDate, Username, OrderTotal, Status) VALUES(?, ?, ?, ?, ?)";
+            String query = "INSERT INTO OrderLines (OrderLineId, ProductId, Quantity, LineTotal, OrderId) VALUES(?, ?, ?, ?, ?)";
             PreparedStatement ps = conn.prepareStatement(query);
 
             ps.setInt(1, ol.getOrderLineId());
-            ps.setInt(2, product.getProductId());
+            ps.setInt(2, ol.getProduct().getProductId());
             ps.setInt(3, ol.getQuantity());
             ps.setDouble(4, ol.getLineTotal());
-            ps.setInt(5, last) ;
+            ps.setInt(5, orderId) ;
 
             ps.executeUpdate();
-
-            ResultSet rs = ps.getGeneratedKeys();
-            rs.next();
-            int lastInsertedOrderID = rs.getInt(1);
         }
         catch(Exception ex){
-            System.out.println("Error Writing Orders: " + ex.getMessage());
+            System.out.println("Error Writing OrderLines: " + ex.getMessage());
         }
     }
 
@@ -258,9 +298,9 @@ public class DBManager {
 
             ps.executeUpdate();
 
-            ResultSet rs = ps.getGeneratedKeys();
+            ResultSet rs = ps.getGeneratedKeys(); //return the primary key (which is our orderId!!)
             rs.next();
-            lastInsertedOrderID = rs.getInt(1);
+            lastInsertedOrderID = rs.getInt(1); //ensure the first primary key is returned
         }
         catch(Exception ex){
             System.out.println("Error Writing Orders: " + ex.getMessage());

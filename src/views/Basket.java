@@ -193,6 +193,8 @@ public class Basket extends javax.swing.JFrame {
     private void btnBuyNowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuyNowActionPerformed
         int numberOfOrderLines = 0; //number of orderlines by default which is 0
 
+        int lastInsertedOrderId = 0; //default value for the last orderId
+
         for (Map.Entry<Integer, OrderLine> olEntry : currentOrder.getOrderLines().entrySet())
         {
             numberOfOrderLines++; //for every orderline in the order, increment the total
@@ -217,8 +219,21 @@ public class Basket extends javax.swing.JFrame {
             //if the user clicks YES, the proceed to write the order to the database
             if (result == JOptionPane.YES_OPTION)
             {
-                db.writeOrder(currentOrder, loggedInCustomer.getUsername());
+                lastInsertedOrderId = db.writeOrder(currentOrder, loggedInCustomer.getUsername());
                 // JOptionPane.showMessageDialog(null, message[3]);
+            }
+
+            //loop through our current orderlines
+            for(Map.Entry<Integer, OrderLine> oEntry : currentOrder.getOrderLines().entrySet())
+            {
+                OrderLine actuaOrderLine = oEntry.getValue();
+
+                //write orderline to the database using the value from oEntry KVP
+                db.writeOrderLine(actuaOrderLine, lastInsertedOrderId);
+
+                //write the new stock level to the database using the quantity purchased
+                db.writeStockLevel(actuaOrderLine.getProduct().getProductId(), actuaOrderLine.getQuantity());
+
             }
 
             //once the order is written to the database, display the order confirmation form
