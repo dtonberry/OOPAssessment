@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Types;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 
 
@@ -273,7 +274,7 @@ public class DBManager {
             while(rs.next())
             {
                 int orderId = rs.getInt("OrderId");
-                Date orderDate = rs.getDate("OrderDate");
+                java.util.Date orderDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("OrderDate"));
                 String username = rs.getString("Username");
                 double orderTotal = rs.getDouble("OrderTotal");
                 String status = rs.getString("Status");
