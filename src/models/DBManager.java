@@ -1,6 +1,7 @@
 package models;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -119,6 +120,10 @@ public class DBManager {
         catch (Exception ex) {
             System.out.println("Error loading Customers: " + ex.getMessage());
         }
+        //stage 15 addition that allows customers that have been loaded
+        //from the loadOrders method to be returned and in turn
+        //loads the customers with orders that have been made
+        customers = loadPreviousOrders(customers); 
         return customers;
     }
 
@@ -248,6 +253,48 @@ public class DBManager {
         }
     }
 
+
+    /*********************************************************************
+     * This will fetch all of the orders in the "orders" table in the database
+     * Using a hashmap of customers an input parameter, this willl cross reference
+     * orders with customers using the "username" key
+     **********************************************************************/
+    public HashMap<String, Customer> loadPreviousOrders(HashMap<String, Customer> customers)
+    {
+        try(Connection conn = DriverManager.getConnection(connectionString);){
+            //this loads the ucanaccess drivers
+            Class.forName(driver);
+            //insert into the database using a placeholder statement to improve readability
+            String query = "SELECT * FROM Orders";
+            Statement ps = conn.createStatement();
+
+            ResultSet rs = ps.executeQuery(query);
+
+            while(rs.next())
+            {
+                int orderId = rs.getInt("OrderId");
+                Date orderDate = rs.getDate("OrderDate");
+                String username = rs.getString("Username");
+                double orderTotal = rs.getDouble("OrderTotal");
+                String status = rs.getString("Status");
+
+                //putting the orders in to an "order"
+                Order order = new Order(orderId, orderDate, orderTotal, status);
+
+                //if the hashmap of customers contains the username(key) that
+                //is present in the db order, get that username in a Customer object
+                if(customers.containsKey(username))
+                {
+                    Customer cust = customers.get(username);
+                    cust.getOrders().put(orderId, order);
+                }
+            }
+        }
+        catch(Exception ex){
+            System.out.println("Error Fetching Orders: " + ex.getMessage());
+        }
+        return customers;
+    }
 
     /*********************************************************************
      * This will add the current orderline to the orderline table in the database

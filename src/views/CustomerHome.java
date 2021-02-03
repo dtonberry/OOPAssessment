@@ -5,7 +5,9 @@
  */
 package views;
 
+import java.util.HashMap;
 import models.Customer;
+import models.DBManager;
 import models.Order;
 
 /**
@@ -118,7 +120,17 @@ public class CustomerHome extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBrowseProductsActionPerformed
 
     private void btnViewOrdersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewOrdersActionPerformed
-        // TODO add your handling code here:
+        HashMap<String, Customer> customers = new HashMap<String, Customer>();
+        customers.put(loggedInCustomer.getUsername(), loggedInCustomer);
+        
+        DBManager db = new DBManager();       
+        customers = db.loadPreviousOrders(customers);
+
+        //create a new instance of the Customer Previous Orders Frame
+        //passing in loggedInCustomer as this will contain the order information too
+        CustomerPreviousOrders previousOrder = new CustomerPreviousOrders(loggedInCustomer);
+        this.dispose();
+        previousOrder.setVisible(true);
     }//GEN-LAST:event_btnViewOrdersActionPerformed
 
     private void btnLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOutActionPerformed
