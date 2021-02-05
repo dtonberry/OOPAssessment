@@ -5,6 +5,7 @@
  */
 package views;
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.DefaultListModel;
@@ -29,6 +30,7 @@ public class UnregisteredUserViewProducts extends javax.swing.JFrame {
         DBManager db  = new DBManager(); 
         products = db.loadProducts(); 
         initComponents();
+        this.getContentPane().setBackground(Color.lightGray); //set colour to light grey
     }
 
     /**

@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.Map;
 
 
 
@@ -254,10 +255,60 @@ public class DBManager {
         }
     }
 
+        /*********************************************************************
+     * This will fetch all of the orders in the "orderLines" table in the database
+     * Using a hashmap of customers an input parameter, this will cross reference
+     * orderLines with customers and their orders using the "orderId" key
+     **********************************************************************/
+    public HashMap<String, Customer> loadAllOrderLines(HashMap<String, Customer> customers)
+    {
+        try (Connection conn = DriverManager.getConnection(connectionString);) {
+            //this loads the ucanaccess drivers
+            Class.forName(driver);
+            //insert into the database using a placeholder statement to improve readability
+            String query = "SELECT * FROM OrderLines";
+            Statement ps = conn.createStatement();
+
+            ResultSet rs = ps.executeQuery(query);
+
+            while (rs.next()) {
+                int orderLineId = rs.getInt("OrderLineId");
+                int productId = rs.getInt("ProductId");
+                int quantity = rs.getInt("Quantity");
+                double lineTotal = rs.getDouble("LineTotal");
+                int orderId = rs.getInt("OrderId");
+                
+                HashMap<Integer, Product> products = loadProducts();
+                Product productBought = products.get(productId);
+                
+                //putting the orders in to an "order"
+                OrderLine ol = new OrderLine(orderLineId, productBought, lineTotal, quantity);
+
+                for(Map.Entry<String, Customer> customerEntry : customers.entrySet())
+                {
+                    Customer customer = customerEntry.getValue();
+                    
+                    if(customer.getOrders().containsKey(orderId))
+                    {
+                        Order order =  customer.getOrders().get(orderId);
+                        order.getOrderLines().put(orderLineId, ol);
+                    }
+                    
+                }
+            }
+            
+            
+        }
+        catch (Exception ex) {
+            System.out.println("Error Fetching Orders: " + ex.getMessage());
+        }
+        return customers;
+            
+    }
 
     /*********************************************************************
      * This will fetch all of the orders in the "orders" table in the database
-     * Using a hashmap of customers an input parameter, this willl cross reference
+     * Using a hashmap of customers an input parameter, this will cross reference
      * orders with customers using the "username" key
      **********************************************************************/
     public HashMap<String, Customer> loadPreviousOrders(HashMap<String, Customer> customers)
@@ -294,6 +345,7 @@ public class DBManager {
         catch(Exception ex){
             System.out.println("Error Fetching Orders: " + ex.getMessage());
         }
+        customers = loadAllOrderLines(customers);
         return customers;
     }
 

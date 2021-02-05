@@ -5,6 +5,7 @@
  */
 package views;
 
+import java.awt.Color;
 import java.util.Map;
 
 import javax.swing.JOptionPane;
@@ -38,6 +39,7 @@ public class Basket extends javax.swing.JFrame {
         loggedInCustomer = customer; //taking the currently logged in customer as an arguement
         currentOrder = order; //taking the current order as an arguement
         initComponents();
+        this.getContentPane().setBackground(Color.lightGray); //set colour to light grey
 
         DefaultTableModel basketModel = (DefaultTableModel)tblBasket.getModel();
 

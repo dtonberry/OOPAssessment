@@ -5,6 +5,7 @@
  */
 package views;
 
+import java.awt.Color;
 import java.util.HashMap;
 
 import javax.swing.JOptionPane;
@@ -31,6 +32,7 @@ public class Registration extends javax.swing.JFrame {
          */
         public Registration() {
                 initComponents();
+                this.getContentPane().setBackground(Color.lightGray); //set colour to light grey
         }
 
         /**

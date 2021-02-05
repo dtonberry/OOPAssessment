@@ -5,6 +5,7 @@
  */
 package views;
 
+import java.awt.Color;
 import javax.swing.table.DefaultTableModel;
 
 import models.Customer;
@@ -26,6 +27,7 @@ public class OrderConfirmation extends javax.swing.JFrame {
         loggedInCustomer = customer;
         currentOrder = order;
         initComponents();
+        this.getContentPane().setBackground(Color.lightGray); //set colour to light grey
 
         lblConfirmation.setText(currentOrder.DisplayConfirmation()); //gets the order confirmation message from the Order class
         

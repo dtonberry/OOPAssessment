@@ -76,7 +76,7 @@ public class OrderLine
     }
     
     //constructors
-    OrderLine(int orderLineIdIn, Product productIn, double LineTotalIn, int quantityIn)
+    public OrderLine(int orderLineIdIn, Product productIn, double LineTotalIn, int quantityIn)
     {
         orderLineId = orderLineIdIn;
         quantity = quantityIn;

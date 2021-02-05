@@ -5,6 +5,7 @@
  */
 package views;
 
+import java.awt.Color;
 import java.util.HashMap;
 import models.Customer;
 import models.DBManager;
@@ -27,6 +28,7 @@ public class CustomerHome extends javax.swing.JFrame {
         loggedInCustomer = customer;
         
         initComponents();
+        this.getContentPane().setBackground(Color.lightGray); //set colour to light grey
 
         //setting the JLabel text to display my greeting
         lblGreeting.setText(loggedInCustomer.displayGreeting());
@@ -125,6 +127,8 @@ public class CustomerHome extends javax.swing.JFrame {
         
         DBManager db = new DBManager();       
         customers = db.loadPreviousOrders(customers);
+
+	loggedInCustomer = customers.get(loggedInCustomer.getUsername());
 
         //create a new instance of the Customer Previous Orders Frame
         //passing in loggedInCustomer as this will contain the order information too

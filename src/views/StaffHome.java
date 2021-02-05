@@ -5,6 +5,7 @@
  */
 package views;
 
+import java.awt.Color;
 import models.Staff;
 
 /**
@@ -23,6 +24,7 @@ public class StaffHome extends javax.swing.JFrame {
         loggedInStaff = staff;
         
         initComponents();
+        this.getContentPane().setBackground(Color.lightGray); //set colour to light grey
         
         //setting my displayGreeting to the one found in "staff"
         lblGreeting.setText(loggedInStaff.displayGreeting());
@@ -96,7 +98,9 @@ public class StaffHome extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnViewOrdersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewOrdersActionPerformed
-        // TODO add your handling code here:
+        StaffAllOrders sorders = new StaffAllOrders(loggedInStaff);
+        this.dispose();
+        sorders.setVisible(true);
     }//GEN-LAST:event_btnViewOrdersActionPerformed
 
     private void btnLogOut1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOut1ActionPerformed

@@ -5,6 +5,9 @@
  */
 package views;
 
+import java.awt.Color;
+
+
 /**
  *
  * @author mark
@@ -16,6 +19,7 @@ public class MainMenu extends javax.swing.JFrame {
      */
     public MainMenu() {
         initComponents();
+        this.getContentPane().setBackground(Color.lightGray); //set colour to light grey
     }
 
     /**
@@ -33,6 +37,8 @@ public class MainMenu extends javax.swing.JFrame {
         btnViewProducts = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setFont(new java.awt.Font("Century Gothic", 0, 10)); // NOI18N
+        setForeground(java.awt.Color.darkGray);
 
         jLabel1.setText("Main Menu");
 
@@ -72,7 +78,7 @@ public class MainMenu extends javax.swing.JFrame {
                             .addComponent(btnCustomerLogin)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(btnStaffLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnViewProducts, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)))))
+                                .addComponent(btnViewProducts, javax.swing.GroupLayout.PREFERRED_SIZE, 123, Short.MAX_VALUE)))))
                 .addContainerGap(139, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -146,6 +152,7 @@ public class MainMenu extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                
                 new MainMenu().setVisible(true);
             }
         });

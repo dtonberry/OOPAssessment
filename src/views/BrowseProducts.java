@@ -5,6 +5,7 @@
  */
 package views;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,6 +61,7 @@ public class BrowseProducts extends javax.swing.JFrame {
         products = db.loadProducts(); 
 
         initComponents();
+        this.getContentPane().setBackground(Color.lightGray); //set colour to light grey
     }
 
     //this constructor will handle when an order needs to be passed back to the "BrowseProducts" view
@@ -227,6 +229,7 @@ public class BrowseProducts extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnViewBasketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewBasketActionPerformed
+        //this will pass the current order in to the basket
         Basket basket  = new Basket(loggedInCustomer, currentOrder);
         this.dispose();
         basket.setVisible(true);

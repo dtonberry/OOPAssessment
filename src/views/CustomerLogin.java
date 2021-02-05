@@ -5,6 +5,7 @@
  */
 package views;
 
+import java.awt.Color;
 import javax.swing.JOptionPane;
 
 import models.Customer;
@@ -21,6 +22,7 @@ public class CustomerLogin extends javax.swing.JFrame {
      */
     public CustomerLogin() {
         initComponents();
+        this.getContentPane().setBackground(Color.lightGray); //set colour to light grey
     }
 
     /**

@@ -5,6 +5,7 @@
  */
 package views;
 
+import java.awt.Color;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.HashMap;
@@ -43,6 +44,7 @@ public class EditProducts extends javax.swing.JFrame {
         productToEdit = product;
 
         initComponents();
+        this.getContentPane().setBackground(Color.lightGray); //set colour to light grey
 
         //this will load all of the products attributes in to their textfields
         txtId.setText(String.valueOf(productToEdit.getProductId()));

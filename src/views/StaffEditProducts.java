@@ -5,6 +5,7 @@
  */
 package views;
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.DefaultListModel;
@@ -35,6 +36,8 @@ public class StaffEditProducts extends javax.swing.JFrame {
         //contents from "loadProducts"
         products = db.loadProducts(); 
         initComponents();
+        
+        this.getContentPane().setBackground(Color.lightGray); //set colour to light grey
     }
 
     /**
